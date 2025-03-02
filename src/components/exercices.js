@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaPen } from "react-icons/fa";
-import { FaTrash } from "react-icons/fa";
+import { FaPen, FaTrash } from 'react-icons/fa';
 
 const ExerciceList = () => {
     const [exercices, setExercices] = useState([]);
@@ -47,11 +46,7 @@ const ExerciceList = () => {
     }, [navigate]);
 
     const handleDelete = async (id) => {
-        const isConfirmed = window.confirm('Etes-vous sûr de vouloir supprimer cet Exercice ?');
-
-        if (!isConfirmed) {
-            return;
-        }
+        if (!window.confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?')) return;
 
         const token = localStorage.getItem('token');
         try {
@@ -64,8 +59,8 @@ const ExerciceList = () => {
             });
 
             if (response.ok) {
-                setExercices(exercices.filter(exercice => exercice.id !== id));
-                setFilteredExercices(filteredExercices.filter(exercice => exercice.id !== id));
+                setExercices(exercices.filter(ex => ex.id !== id));
+                setFilteredExercices(filteredExercices.filter(ex => ex.id !== id));
             } else {
                 setError('Échec de la suppression de l\'exercice.');
             }
@@ -74,83 +69,70 @@ const ExerciceList = () => {
         }
     };
 
-    const handleEdit = (id) => {
-        navigate(`/modifierExercices/${id}`);
-    };
+    const handleEdit = (id) => navigate(`/modifierExercices/${id}`);
 
     const handleSearch = (event) => {
         const query = event.target.value.toLowerCase();
         setSearchQuery(query);
-
-        const filtered = exercices.filter((exercice) =>
-            exercice.nom.toLowerCase().includes(query)
-        );
-        setFilteredExercices(filtered);
+        setFilteredExercices(exercices.filter(ex => ex.nom.toLowerCase().includes(query)));
     };
 
-    if (error) {
-        return <div className="alert alert-danger">{error}</div>;
-    }
+    if (error) return <div className="alert alert-danger">{error}</div>;
 
     return (
         <div className="container py-5">
-            <h2 className="mb-4 text-center text-success">Exercices Mind Fit </h2>
-
-            {/* Champ de recherche */}
-            <div className="mb-4">
+            <h2 className="mb-4 text-center text-primary fw-bold">Exercices Mind Fit</h2>
+            <div className="mb-4 d-flex justify-content-center">
                 <input
                     type="text"
-                    className="form-control"
-                    placeholder="Rechercher par nom..."
+                    className="form-control w-50 shadow-sm rounded-pill px-3"
+                    placeholder="🔍 Rechercher un exercice..."
                     value={searchQuery}
                     onChange={handleSearch}
                 />
             </div>
-
-            <div className="card shadow-lg border-success">
-                <div className="card-body">
-                    <table className="table table-hover table-striped">
-                        <thead className="table-success">
-                            <tr>
-                                <th>Nom</th>
-                                <th>Description</th>
-                                <th>Durée</th>
-                                <th>Type</th>
-                                <th>Fréquence Recommandée</th>
-                                <th>Humeur de l'Exercice</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredExercices.map((exercice) => (
-                                <tr key={exercice.id}>
-                                    <td>{exercice.nom}</td>
-                                    <td>{exercice.description}</td>
-                                    <td>{exercice.duree}</td>
-                                    <td>{exercice.type}</td>
-                                    <td>{exercice.frequence_recommandee}</td>
-                                    <td>{exercice.exerciceHumeur}</td>
-                                    <td className="text-center">
-                                        <div className="d-flex justify-content-between">
-                                            <button
-                                                className="btn btn-outline-success btn-sm"
-                                                onClick={() => handleEdit(exercice.id)}
-                                            >
-                                                <FaPen /> Modifier
+            <div className="table-responsive">
+                <table className="table table-striped table-hover shadow-sm rounded">
+                    <thead className="bg-primary text-white text-center">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th>Durée</th>
+                            <th>Type</th>
+                            <th>Fréquence</th>
+                            <th>Humeur</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-center">
+                        {filteredExercices.length > 0 ? (
+                            filteredExercices.map((ex) => (
+                                <tr key={ex.id} className="align-middle">
+                                    <td className="fw-bold">{ex.nom}</td>
+                                    <td>{ex.description}</td>
+                                    <td>{ex.duree}</td>
+                                    <td>{ex.type}</td>
+                                    <td>{ex.frequence_recommandee}</td>
+                                    <td>{ex.exerciceHumeur}</td>
+                                    <td>
+                                        <div className="d-flex justify-content-center gap-2">
+                                            <button className="btn btn-outline-primary btn-sm" onClick={() => handleEdit(ex.id)}>
+                                                <FaPen />
                                             </button>
-                                            <button
-                                                className="btn btn-outline-danger btn-sm"
-                                                onClick={() => handleDelete(exercice.id)}
-                                            >
-                                                <FaTrash /> Supprimer
+                                            <button className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(ex.id)}>
+                                                <FaTrash />
                                             </button>
                                         </div>
                                     </td>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="7" className="text-muted text-center py-3">Aucun exercice trouvé.</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Form } from 'react-bootstrap';
 
 const AddExercice = () => {
     const [exercice, setExercice] = useState({
@@ -8,7 +9,8 @@ const AddExercice = () => {
         duree: '',
         frequence_recommandee: '',
         exerciceHumeur: '',
-        type: '', // Nouveau champ pour le type d'exercice
+        type: '',
+        url: ''
     });
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -41,55 +43,53 @@ const AddExercice = () => {
         }
     };
 
-    if (error) {
-        return <div className="alert alert-danger">{error}</div>;
-    }
-
     return (
         <div className="container py-5">
-            <h2 className="mb-4 text-center text-success">Ajouter un Exercice</h2>
-            <div className="card shadow-lg border-success">
+            <h2 className="mb-4 text-center text-primary fw-bold">Ajouter un Exercice</h2>
+            {error && <div className="alert alert-danger">{error}</div>}
+            <div className="card shadow-sm">
                 <div className="card-body">
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label className="form-label" htmlFor="nom">Nom</label>
-                            <input
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="nom">Nom</Form.Label>
+                            <Form.Control
                                 type="text"
-                                className="form-control"
                                 id="nom"
                                 name="nom"
                                 value={exercice.nom}
                                 onChange={handleChange}
                                 required
                             />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label" htmlFor="description">Description</label>
-                            <textarea
-                                className="form-control"
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="description">Description</Form.Label>
+                            <Form.Control
+                                as="textarea"
                                 id="description"
                                 name="description"
                                 value={exercice.description}
                                 onChange={handleChange}
                                 required
                             />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label" htmlFor="duree">Durée</label>
-                            <input
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="duree">Durée</Form.Label>
+                            <Form.Control
                                 type="number"
-                                className="form-control"
                                 id="duree"
                                 name="duree"
                                 value={exercice.duree}
                                 onChange={handleChange}
                                 required
                             />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label" htmlFor="humeur">Humeur de l'Exercice</label>
-                            <select
-                                className="form-control"
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="humeur">Humeur de l'Exercice</Form.Label>
+                            <Form.Control
+                                as="select"
                                 id="exerciceHumeur"
                                 name="exerciceHumeur"
                                 value={exercice.exerciceHumeur}
@@ -101,12 +101,25 @@ const AddExercice = () => {
                                 <option value="Fatigué">Fatigué</option>
                                 <option value="Motivé">Motivé</option>
                                 <option value="Relaxé">Relaxé</option>
-                            </select>
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label" htmlFor="type">Type d'Exercice</label>
-                            <select
-                                className="form-control"
+                            </Form.Control>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="url">Vidéo</Form.Label>
+                            <Form.Control
+                                type="url"
+                                id="url"
+                                name="url"
+                                value={exercice.url}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="type">Type d'Exercice</Form.Label>
+                            <Form.Control
+                                as="select"
                                 id="type"
                                 name="type"
                                 value={exercice.type}
@@ -116,26 +129,26 @@ const AddExercice = () => {
                                 <option value="">Sélectionner un type</option>
                                 <option value="Conseillé">Conseillé</option>
                                 <option value="Exercice">Exercice</option>
-                            </select>
-                        </div>
+                            </Form.Control>
+                        </Form.Group>
+
                         {/* Champ "Fréquence Recommandée" masqué si le type est "Conseillé" */}
                         {exercice.type !== 'Conseillé' && (
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="frequence_recommandee">Fréquence Recommandée</label>
-                                <input
+                            <Form.Group className="mb-3">
+                                <Form.Label htmlFor="frequence_recommandee">Fréquence Recommandée</Form.Label>
+                                <Form.Control
                                     type="text"
-                                    className="form-control"
                                     id="frequence_recommandee"
                                     name="frequence_recommandee"
                                     value={exercice.frequence_recommandee}
                                     onChange={handleChange}
                                     required
                                 />
-                            </div>
+                            </Form.Group>
                         )}
 
-                        <button type="submit" className="btn btn-success">Ajouter l'Exercice</button>
-                    </form>
+                        <Button type="submit" variant="primary" className="w-100 mt-3">Ajouter l'Exercice</Button>
+                    </Form>
                 </div>
             </div>
         </div>
