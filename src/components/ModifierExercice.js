@@ -68,22 +68,22 @@ const ModifyExercice = () => {
             if (response.ok) {
                 navigate('/exercices');
             } else {
-                setError('Échec de la mise à jour de l\'exercice.');
+                setError('Failed to update the exercise.');
             }
         } catch (error) {
-            setError('Une erreur est survenue lors de la mise à jour de l\'exercice.');
+            setError('An error occurred while updating the exercise.');
         }
     };
 
     return (
         <div className="container py-5">
-            <h2 className="mb-4 text-center text-primary fw-bold">Modifier l'Exercice</h2>
+            <h2 className="mb-4 text-center text-primary fw-bold">Modify Exercise</h2>
             {error && <div className="alert alert-danger">{error}</div>}
             <div className="card shadow-sm">
                 <div className="card-body">
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
-                            <Form.Label htmlFor="nom">Nom</Form.Label>
+                            <Form.Label htmlFor="nom">Name</Form.Label>
                             <Form.Control
                                 type="text"
                                 id="nom"
@@ -107,7 +107,7 @@ const ModifyExercice = () => {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label htmlFor="duree">Durée</Form.Label>
+                            <Form.Label htmlFor="duree">Duration</Form.Label>
                             <Form.Control
                                 type="number"
                                 id="duree"
@@ -119,7 +119,7 @@ const ModifyExercice = () => {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label htmlFor="exerciceHumeur">Humeur de l'Exercice</Form.Label>
+                            <Form.Label htmlFor="exerciceHumeur">Exercise Mood</Form.Label>
                             <Form.Control
                                 as="select"
                                 id="exerciceHumeur"
@@ -128,27 +128,28 @@ const ModifyExercice = () => {
                                 onChange={handleChange}
                                 required
                             >
-                                <option value="content">Content</option>
-                                <option value="fatigue">Fatigué</option>
-                                <option value="motivé">Motivé</option>
-                                <option value="stressé">Stressé</option>
+                                <option value="">Select a mood</option>
+                                <option value="Happy">Happy</option>
+                                <option value="Tired">Tired</option>
+                                <option value="Relaxed">Relaxed</option>
+                                <option value="Angry">Angry</option>
                             </Form.Control>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label htmlFor="url">Vidéo</Form.Label>
+                            <Form.Label htmlFor="url">Video URL</Form.Label>
                             <Form.Control
-                                type="url"
+                                type="text"
                                 id="url"
                                 name="url"
                                 value={exercice.url}
                                 onChange={handleChange}
-                                required
+
                             />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label htmlFor="type">Type d'Exercice</Form.Label>
+                            <Form.Label htmlFor="type">Exercise Type</Form.Label>
                             <Form.Control
                                 as="select"
                                 id="type"
@@ -156,15 +157,15 @@ const ModifyExercice = () => {
                                 value={exercice.type}
                                 onChange={handleChange}
                                 required
+                                disabled // Disable the input field
                             >
-                                <option value="exercice">Exercice</option>
-                                <option value="conseil">Conseil</option>
+                                <option value="Exercice">Exercise</option>
+                                <option value="Conseil">Advice</option>
                             </Form.Control>
                         </Form.Group>
-
-                        {exercice.type === 'exercice' && (
+                        {exercice.type !== 'Conseil' && (
                             <Form.Group className="mb-3">
-                                <Form.Label htmlFor="frequence_recommandee">Fréquence Recommandée</Form.Label>
+                                <Form.Label htmlFor="frequence_recommandee">Recommended Frequency</Form.Label>
                                 <Form.Control
                                     type="text"
                                     id="frequence_recommandee"
@@ -175,8 +176,7 @@ const ModifyExercice = () => {
                                 />
                             </Form.Group>
                         )}
-
-                        <Button type="submit" variant="primary" className="w-100 mt-3">Mettre à jour</Button>
+                        <Button type="submit" variant="primary" className="w-100 mt-3">Update</Button>
                     </Form>
                 </div>
             </div>

@@ -77,6 +77,22 @@ const ExerciceList = () => {
         setFilteredExercices(exercices.filter(ex => ex.nom.toLowerCase().includes(query)));
     };
 
+    const getHumeurEmoji = (humeur) => {
+        switch (humeur.toLowerCase()) {
+            case 'happy':
+                return '😊';  // emoji pour "Happy"
+            case 'tired':
+                return '😴';  // emoji pour "Tired"
+            case 'relaxed':
+                return '😌';  // emoji pour "Relaxed"
+            case 'angry':
+                return '😡';  // emoji pour "Angry"
+            default:
+                return '😐';  // emoji par défaut
+        }
+    };
+
+
     if (error) return <div className="alert alert-danger">{error}</div>;
 
     return (
@@ -99,7 +115,6 @@ const ExerciceList = () => {
                             <th>Description</th>
                             <th>Durée</th>
                             <th>Type</th>
-                            <th>Fréquence</th>
                             <th>Humeur</th>
                             <th>Actions</th>
                         </tr>
@@ -110,10 +125,9 @@ const ExerciceList = () => {
                                 <tr key={ex.id} className="align-middle">
                                     <td className="fw-bold">{ex.nom}</td>
                                     <td>{ex.description}</td>
-                                    <td>{ex.duree}</td>
+                                    <td>{ex.duree} Min</td>
                                     <td>{ex.type}</td>
-                                    <td>{ex.frequence_recommandee}</td>
-                                    <td>{ex.exerciceHumeur}</td>
+                                    <td>{getHumeurEmoji(ex.exerciceHumeur)}</td>
                                     <td>
                                         <div className="d-flex justify-content-center gap-2">
                                             <button className="btn btn-outline-primary btn-sm" onClick={() => handleEdit(ex.id)}>
@@ -128,7 +142,7 @@ const ExerciceList = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="7" className="text-muted text-center py-3">Aucun exercice trouvé.</td>
+                                <td colSpan="6" className="text-muted text-center py-3">Aucun exercice trouvé.</td>
                             </tr>
                         )}
                     </tbody>
